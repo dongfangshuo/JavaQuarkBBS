@@ -12,7 +12,7 @@ import java.util.Properties;
  * Created by lhr on 17-7-31.
  */
 @SpringBootApplication
-@EnableCaching//缓存支持
+//@EnableCaching//缓存支持
 public class RestApplication {
 
     public static void main(String[] args) throws IOException {

@@ -10,22 +10,41 @@
             <a class="nav-this" th:href="@{/label}">
                 <i class="iconfont icon-wenda"></i>标签
             </a>
-            <a class="nav-this" th:href="@{/chat}">
-                <i class="iconfont icon-wenda"></i>聊天室
-            </a>
         </div>
 
         <div class="nav-user">
         </div>
     </div>
 </div>
+<script th:inline="text">
+    var quark_login_api = "[[${apiUrl}]]/user/api/login";
+    var quark_getUser_api = "[[${apiUrl}]]/user/api/message/";
+    var quark_logout_api = "[[${apiUrl}]]/user/api/logout";
+    var quark_register_api = "[[${apiUrl}]]/user/api/register";
+    var quark_upload_api = "[[${apiUrl}]]/upload/api/image";
+    var quark_upload_icon_api = "[[${apiUrl}]]/upload/api/usericon/";
+    var quark_posts_add_api = "[[${apiUrl}]]/posts/api/post";
+    var quark_posts_get_api = "[[${apiUrl}]]/posts/api/get";
+    var quark_posts_detail_api = "[[${apiUrl}]]/posts/api/detail/";
+    var quark_reply_add_api = "[[${apiUrl}]]/reply/api";
+    var quark_label_getall_api = "[[${apiUrl}]]/label/api";
+    var quark_rank_posts_api="[[${apiUrl}]]/rank/api/topPosts";
+    var quark_rank_users_api = "[[${apiUrl}]]/rank/api/newUsers";
+    var quark_user_detail_api = "[[${apiUrl}]]/user/api/detail";
+    var quark_user_update_api = "[[${apiUrl}]]/user/api/info/";
+    var quark_user_update_psd_api = "[[${apiUrl}]]/user/api/password";
+    var quark_label_posts_api = "[[${apiUrl}]]/posts/api/label/";
+    var quark_webSocket_api = "[[${apiUrl}]]/api/quarkServer";
+    var quark_notification_api="[[${apiUrl}]]/notification/api";
+    var quark_chat_webSocket_api = "[[${socket_url}]]";
 
+</script>
 <script th:src="@{/layui/layui.js}"></script>
 <script th:src="@{/js/jquery-1.11.2.min.js}"></script>
 <script th:src="@{/js/jquery.cookie.js}"></script>
 <script th:src="@{/js/quark_api.js}"></script>
 <script th:src="@{/js/sockjs.min.js}"></script>
-<script th:src="@{/js/stomp.min.js}"></script>
+<script th:src="@{/js/stomp.min.js}" ></script>
 <script>
     //获取用户信息渲染页面
     var htm = "";
@@ -43,8 +62,6 @@
                 "<a href='/user/set'><i class='iconfont icon-shezhi'></i>设置</a>"+
                 "<a href='' onclick='logout()'><i class='iconfont icon-tuichu' style='top: 0; font-size: 22px;'></i>退了</a>"+
                 "</div>";
-
-            connectWebSocket(data.data.user.id);
         }else{
             htm ="<a class='unlogin' href='#'><i class='iconfont icon-touxiang'></i></a>"+
                 "<span><a href='/user/login'>登入</a><a href='/user/register'>注册</a></span>";
@@ -68,27 +85,6 @@
             });
         }
 
-        //连接服务器webSocket操作
-        function connectWebSocket(id) {
-            var socket = new SockJS(quark_webSocket_api, undefined, {protocols_whitelist: ['websocket']});
-            var stompClient  = Stomp.over(socket);
-
-            //接收到广播推送
-            stompClient.connect({},function (frame) {
-                stompClient.subscribe('/topic/all', function(message){
-                });
-
-                //接收到一对一推送
-                stompClient.subscribe('/user/' + id + '/message', function(message){
-                    if($('.nav-message').length>0) {
-                        $('.nav-message').html(JSON.parse(message.body).notice);
-                    }else{
-                        $(".nav-user").prepend("<a class='nav-message' href='../user/message'>"+JSON.parse(message.body).notice+"</a>");
-                    }
-                });
-
-            })
-        }
 
 </script>
 </div>

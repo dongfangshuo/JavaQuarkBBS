@@ -1,6 +1,6 @@
 package com.quark.porent.service.impl;
 
-import com.quark.porent.entity.User;
+import com.quark.common.entity.User;
 import com.quark.porent.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,7 +23,7 @@ public class UserServiceImplTest {
 
     @Test
     public void getUserByApi() throws Exception {
-       User user =userService.getUserByApi("bee1a09b-9867-4f1a-9886-c25d8b0e42b1");
+       User user = userService.getUserByToken("bee1a09b-9867-4f1a-9886-c25d8b0e42b1");
         System.out.println(user);
     }
 

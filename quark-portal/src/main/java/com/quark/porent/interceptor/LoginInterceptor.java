@@ -1,15 +1,20 @@
 package com.quark.porent.interceptor;
 
-import com.quark.porent.entity.User;
+import com.alibaba.fastjson.JSON;
+import com.quark.common.dto.QuarkResult;
+import com.quark.common.entity.User;
 import com.quark.porent.service.UserService;
 import com.quark.porent.utils.CookieUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * @Author LHR
@@ -17,30 +22,30 @@ import javax.servlet.http.HttpServletResponse;
  *
  * 登录拦截
  */
+@Service
 public class LoginInterceptor implements HandlerInterceptor {
 
+    public static final String TOKEN = "QUARK_TOKEN";
     @Autowired
     private UserService userService;
 
-    @Value("${cookie_name}")
-    private String CookieName;
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
 
-        String token = CookieUtils.getCookieValue(httpServletRequest, "QUARK_TOKEN");
+        String token = CookieUtils.getCookieValue(httpServletRequest, TOKEN);
+        String requestUri = httpServletRequest.getRequestURI();
+        Boolean isapi = requestUri.matches(".*/api/?.*");
         if (token==null) {
-            // 跳转到登录页面
-            httpServletResponse.sendRedirect("/user/login");
+            resonse(isapi,httpServletResponse);
             // 返回false
             return false;
         }
-        User user = userService.getUserByApi(token);
-
+        User user = userService.getUserByToken(token);
+        SubjectHolder.put(user);
         // 取不到用户信息
         if (user == null) {
-            // 跳转到登录页面
-            httpServletResponse.sendRedirect("/user/login");
+            resonse(isapi,httpServletResponse);
             // 返回false
             return false;
         }
@@ -54,6 +59,26 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     @Override
     public void afterCompletion(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, Exception e) throws Exception {
+
+    }
+
+
+    private void resonse(Boolean isApi, HttpServletResponse httpServletResponse){
+        if(isApi){
+            try {
+                PrintWriter printWriter = httpServletResponse.getWriter();
+                printWriter.print(JSON.toJSONString(QuarkResult.error("请登录")));
+                printWriter.flush();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+            try {
+                httpServletResponse.sendRedirect("/user/login");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 }

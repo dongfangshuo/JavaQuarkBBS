@@ -141,7 +141,6 @@ public class UserController extends BaseController {
     })
     @PutMapping("/password/{token}")
     public QuarkResult updatePassword(@PathVariable("token") String token,String newpsd,String oldpsd){
-
         QuarkResult result = restProcessor(() -> {
             userService.updateUserPassword(token,oldpsd,newpsd);
             return QuarkResult.ok();

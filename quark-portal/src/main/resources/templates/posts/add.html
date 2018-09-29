@@ -36,9 +36,9 @@
                         <label class="layui-form-label">标签选择框</label>
                         <div class="layui-input-block">
                             <div class="layui-input-inline">
-                                <select name="modules" lay-verify="required" lay-search="" id="label_select" name="labelId">
+                                <select lay-verify="required" lay-search="" id="label_select" name="labelId">
                                     <option value="">直接选择或搜索选择</option>
-
+                                    <option th:each="label:${labels}" th:value="${label.id}" th:text="${label.name}">直接选择或搜索选择</option>
                                 </select>
                             </div>
                         </div>
@@ -58,19 +58,6 @@
 <!--<script th:src="@{/js/jquery.cookie.js}"></script>-->
 <!--<script th:src="@{/js/quark_api.js}"></script>-->
 <script>
-    //添加option
-    $.get(quark_label_getall_api, function (data) {
-        var htm = "";
-        if (data.status == 200) {
-            for (var i = 0; i < data.data.length; i++) {
-                htm += "<option value='" + data.data[i].id + "'>" + data.data[i].name + "</option>"
-            }
-        } else {
-            layer.msg(data.error, {icon: 5});
-        }
-
-        $("#label_select").append(htm);
-    });
 
     layui.use(['form', 'layedit'], function () {
 

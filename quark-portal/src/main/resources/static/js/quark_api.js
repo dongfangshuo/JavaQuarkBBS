@@ -1,24 +1,6 @@
 /*链接*/
-var quark_login_api = "http://127.0.0.1:8081/user/login";
-var quark_getUser_api = "http://127.0.0.1:8081/user/message/";
-var quark_logout_api = "http://127.0.0.1:8081/user/logout";
-var quark_register_api = "http://127.0.0.1:8081/user";
-var quark_upload_api = "http://127.0.0.1:8081/upload/image";
-var quark_upload_icon_api = "http://127.0.0.1:8081/upload/usericon/";
-var quark_posts_add_api = "http://127.0.0.1:8081/posts";
-var quark_posts_get_api = "http://127.0.0.1:8081/posts";
-var quark_posts_detail_api = "http://127.0.0.1:8081/posts/detail/";
-var quark_reply_add_api = "http://127.0.0.1:8081/reply";
-var quark_label_getall_api = "http://127.0.0.1:8081/label";
-var quark_rank_posts_api="http://127.0.0.1:8081/rank/topPosts";
-var quark_rank_users_api = "http://127.0.0.1:8081/rank/newUsers";
-var quark_user_detail_api = "http://127.0.0.1:8081/user/detail/";
-var quark_user_update_api = "http://127.0.0.1:8081/user/";
-var quark_user_update_psd_api = "http://127.0.0.1:8081/user/password/";
-var quark_label_posts_api = "http://127.0.0.1:8081/posts/label/";
-var quark_webSocket_api = "http://127.0.0.1:8081/quarkServer";
-var quark_notification_api="http://127.0.0.1:8081/notification/";
-var quark_chat_webSocket_api = "ws://127.0.0.1:8083/websocket";
+
+
 function setCookie(data) {
     var expiresDate= new Date();
     expiresDate.setTime(expiresDate.getTime() + (60 * 60 * 1000));
