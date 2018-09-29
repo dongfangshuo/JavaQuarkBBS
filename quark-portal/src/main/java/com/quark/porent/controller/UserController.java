@@ -12,7 +12,15 @@ import com.quark.porent.service.UserService;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.commons.lang.RandomStringUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.RandomUtils;
+import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.MailException;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,6 +47,15 @@ public class UserController extends BaseController {
 
     @Autowired
     private NotificationService notificationService;
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String sender; //读取配置文件中的参数
+
+
+    private static final String SESSION_REGISTER_CODE = "REGISTER_CODE";
 
 
     @RequestMapping("/login")
@@ -72,6 +90,8 @@ public class UserController extends BaseController {
 
     @RequestMapping("/message")
     public String message() { return "user/message"; }
+
+    private EmailValidator emailValidator = new EmailValidator();
 
     private void addCookie(HttpServletResponse httpServletResponse,String token){
         Cookie cookie = new Cookie(LoginInterceptor.TOKEN,token);
@@ -237,6 +257,41 @@ public class UserController extends BaseController {
             return QuarkResult.ok(map);
         });
         return result;
+    }
+    @ApiOperation("发送邮箱验证码")
+    @ApiImplicitParams({
+    })
+    @GetMapping("/api/register/sendemailcode")
+    @ResponseBody
+    public QuarkResult sendEmailCode(String email, String nickname, HttpSession session){
+        QuarkResult result = restProcessor(() -> {
+            if (StringUtils.isBlank(email) || StringUtils.isBlank(nickname)) return QuarkResult.warn("请先填写邮箱和昵称");
+            if(!emailValidator.isValid(email,null)) return QuarkResult.warn("请先填写正确格式的邮箱");
+            String code = RandomStringUtils.randomNumeric(6);
+            session.setAttribute(SESSION_REGISTER_CODE,code);
+            String subject = "在路上-注册验证码";
+            String content = "您的注册验证码是:"+code;
+            boolean isSuccess = sendEmail(email,subject,content);
+            if(!isSuccess) return QuarkResult.warn("邮件发送失败，请核实邮箱是否可用");
+            return QuarkResult.ok();
+        });
+        return result;
+    }
+
+
+    private Boolean sendEmail(String targetEmail,String subject,String content){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(sender);
+        message.setTo(targetEmail); //自己给自己发送邮件
+        message.setSubject(subject);
+        message.setText(content);
+        try{
+            mailSender.send(message);
+        }catch (MailException mailException){
+            mailException.printStackTrace();
+            return false;
+        }
+        return true;
     }
 
 

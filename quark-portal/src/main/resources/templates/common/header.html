@@ -2,7 +2,7 @@
 <div th:fragment="header" xmlns:th="http://www.thymeleaf.org">
 <div class="header">
     <div class="main">
-        <a class="logo" th:href="@{/index}" title="Fly">Quark社区</a>
+        <a class="logo" th:href="@{/index}" title="Fly">在路上</a>
         <div class="nav">
             <a class="nav-this" th:href="@{/index}">
                 <i class="iconfont icon-wenda"></i>交流
@@ -21,6 +21,7 @@
     var quark_getUser_api = "[[${apiUrl}]]/user/api/message/";
     var quark_logout_api = "[[${apiUrl}]]/user/api/logout";
     var quark_register_api = "[[${apiUrl}]]/user/api/register";
+    var quark_register_send_email_code = "[[${apiUrl}]]/user/api/register/sendemailcode";
     var quark_upload_api = "[[${apiUrl}]]/upload/api/image";
     var quark_upload_icon_api = "[[${apiUrl}]]/upload/api/usericon/";
     var quark_posts_add_api = "[[${apiUrl}]]/posts/api/post";

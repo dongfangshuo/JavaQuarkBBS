@@ -11,6 +11,7 @@ import com.quark.porent.utils.FileUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,6 +31,8 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/upload")
 public class UploadController {
+    @Value("${image.host}")
+    private String imgHost;
 
     @Autowired
     private UserService userService;
@@ -45,7 +48,7 @@ public class UploadController {
                 User user = SubjectHolder.get();
                 String key = String.format("/edit/%s/%s/%s",user.getId(), DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now()),UUID.randomUUID().toString());
                 String s = FileUtils.uploadFile(key,file,aliOssClient);
-                result = QuarkResult.ok(new UploadResult.Data(s)) ;
+                result = QuarkResult.ok(new UploadResult.Data(imgHost+s)) ;
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -66,6 +69,7 @@ public class UploadController {
                 User user = SubjectHolder.get();
                 String key = String.format("/usericon/%s/%s/%s",user.getId(), DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now()),UUID.randomUUID().toString());
                 String s = FileUtils.uploadFile(key,file,aliOssClient);
+                s = imgHost + s;
                 userService.updateUserIcon(user.getId(),s);
                 return QuarkResult.ok(new UploadResult.Data(s));
 

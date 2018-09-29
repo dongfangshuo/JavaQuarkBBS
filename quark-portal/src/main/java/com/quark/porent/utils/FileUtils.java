@@ -18,7 +18,7 @@ public class FileUtils {
             String type = file.getContentType();
             String suffix = "." + type.split("/")[1];
             String fileName = key+suffix;
-            try(InputStream inputStream = file.getInputStream();){
+            try(InputStream inputStream = file.getInputStream()){
                 aliOssClient.putImage(inputStream,fileName);
             }
             return fileName;
