@@ -23,6 +23,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.UUID;
 
+import static com.quark.porent.utils.Constants.OSS_IMAGE_STYLE_DEFAULT;
+import static com.quark.porent.utils.Constants.OSS_IMAGE_STYLE_ICON;
+
 /**
  * @Author LHR
  * Create By 2017/8/26
@@ -48,7 +51,7 @@ public class UploadController {
                 User user = SubjectHolder.get();
                 String key = String.format("edit/%s/%s/%s",user.getId(), DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now()),UUID.randomUUID().toString());
                 String s = FileUtils.uploadFile(key,file,aliOssClient);
-                result = QuarkResult.ok(new UploadResult.Data(imgHost+"/"+s)) ;
+                result = QuarkResult.ok(new UploadResult.Data(imgHost+"/"+s+OSS_IMAGE_STYLE_DEFAULT)) ;
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -69,7 +72,7 @@ public class UploadController {
                 User user = SubjectHolder.get();
                 String key = String.format("usericon/%s/%s/%s",user.getId(), DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now()),UUID.randomUUID().toString());
                 String s = FileUtils.uploadFile(key,file,aliOssClient);
-                s = imgHost +"/"+ s;
+                s = imgHost +"/"+ s+OSS_IMAGE_STYLE_ICON;
                 userService.updateUserIcon(user.getId(),s);
                 return QuarkResult.ok(new UploadResult.Data(s));
 

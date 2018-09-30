@@ -275,7 +275,7 @@ public class UserController extends BaseController {
             String code = RandomStringUtils.randomNumeric(6);
             session.setAttribute(SESSION_REGISTER_CODE,code);
             String subject = "在路上-注册验证码";
-            String content = "您的注册验证码是:"+code;
+            String content = String.format("hi,%s:<br/>您的注册验证码是:%s。<br/>from 在路上",nickname,code);
             boolean isSuccess = sendEmail(email,subject,content);
             if(!isSuccess) return QuarkResult.warn("邮件发送失败，请核实邮箱是否可用");
             return QuarkResult.ok();

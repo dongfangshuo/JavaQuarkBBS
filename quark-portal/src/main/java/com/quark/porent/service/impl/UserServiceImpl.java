@@ -17,6 +17,9 @@ import org.springframework.util.DigestUtils;
 import java.util.Date;
 import java.util.UUID;
 
+import static com.quark.porent.utils.Constants.OSS_IMAGE_STYLE_DEFAULT;
+import static com.quark.porent.utils.Constants.OSS_IMAGE_STYLE_ICON;
+
 /**
  * @Author LHR
  * Create By 2017/8/24
@@ -68,7 +71,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User>  implements 
         user.setUsername(username);
         user.setInitTime(new Date());
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
-        user.setIcon("http://img.eastshuo.com/usericon/74/20180930/69d7d04a-c068-423a-8f2d-e9db09a606c2.jpeg");
+        user.setIcon("http://img.eastshuo.com/usericon/74/20180930/69d7d04a-c068-423a-8f2d-e9db09a606c2.jpeg?"+OSS_IMAGE_STYLE_ICON);
         repository.save(user);
     }
 
