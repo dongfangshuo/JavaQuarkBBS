@@ -68,6 +68,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User>  implements 
         user.setUsername(username);
         user.setInitTime(new Date());
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
+        user.setIcon("http://img.eastshuo.com/usericon/74/20180930/69d7d04a-c068-423a-8f2d-e9db09a606c2.jpeg");
         repository.save(user);
     }
 
@@ -113,6 +114,11 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User>  implements 
             throw new ServiceProcessException("原始密码错误,请重新输入");
         user.setPassword(DigestUtils.md5DigestAsHex(newpsd.getBytes()));
         repository.save(user);
+    }
+
+    @Override
+    public User getByPK(Integer id) {
+        return  repository.findOne(id);
     }
 
 }

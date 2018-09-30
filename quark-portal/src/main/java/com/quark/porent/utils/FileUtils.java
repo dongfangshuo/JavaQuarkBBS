@@ -1,6 +1,7 @@
 package com.quark.porent.utils;
 
 import com.quark.common.base.AliOssClient;
+import org.apache.commons.io.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
@@ -19,7 +20,12 @@ public class FileUtils {
             String suffix = "." + type.split("/")[1];
             String fileName = key+suffix;
             try(InputStream inputStream = file.getInputStream()){
-                aliOssClient.putImage(inputStream,fileName);
+                ByteArrayOutputStream arrayOutputStream = new ByteArrayOutputStream();
+                IOUtils.copy(inputStream,arrayOutputStream);
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(arrayOutputStream.toByteArray());
+                aliOssClient.putImage(byteArrayInputStream,fileName);
+                IOUtils.closeQuietly(arrayOutputStream);
+                IOUtils.closeQuietly(byteArrayInputStream);
             }
             return fileName;
         }

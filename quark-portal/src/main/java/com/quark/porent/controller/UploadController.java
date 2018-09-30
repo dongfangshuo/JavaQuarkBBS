@@ -46,9 +46,9 @@ public class UploadController {
         if (!file.isEmpty()) {
             try {
                 User user = SubjectHolder.get();
-                String key = String.format("/edit/%s/%s/%s",user.getId(), DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now()),UUID.randomUUID().toString());
+                String key = String.format("edit/%s/%s/%s",user.getId(), DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now()),UUID.randomUUID().toString());
                 String s = FileUtils.uploadFile(key,file,aliOssClient);
-                result = QuarkResult.ok(new UploadResult.Data(imgHost+s)) ;
+                result = QuarkResult.ok(new UploadResult.Data(imgHost+"/"+s)) ;
                 return result;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -67,9 +67,9 @@ public class UploadController {
         if (!file.isEmpty()) {
             try {
                 User user = SubjectHolder.get();
-                String key = String.format("/usericon/%s/%s/%s",user.getId(), DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now()),UUID.randomUUID().toString());
+                String key = String.format("usericon/%s/%s/%s",user.getId(), DateTimeFormatter.ofPattern("yyyyMMdd").format(LocalDate.now()),UUID.randomUUID().toString());
                 String s = FileUtils.uploadFile(key,file,aliOssClient);
-                s = imgHost + s;
+                s = imgHost +"/"+ s;
                 userService.updateUserIcon(user.getId(),s);
                 return QuarkResult.ok(new UploadResult.Data(s));
 

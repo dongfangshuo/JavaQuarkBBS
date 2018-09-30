@@ -29,7 +29,6 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
                 "/user/seticon",
                 "/user/setpsw",
                 "/user/api/message/**",
-                "/user/api/register",
                 "/user/api/info",
                 "/user/api/password",
                 "/user/api/logout",

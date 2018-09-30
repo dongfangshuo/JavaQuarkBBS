@@ -79,4 +79,11 @@ public interface UserService extends BaseService<User> {
      */
     void updateUserPassword(Integer id, String oldpsd, String newpsd);
 
+    /**
+     * 根据主键获得user
+     * @param id
+     * @return
+     */
+    User getByPK(Integer id);
+
 }

@@ -114,19 +114,23 @@ public class UserController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "email", value = "用户邮箱",dataType = "String"),
             @ApiImplicitParam(name = "username", value = "用户名称",dataType = "String"),
-            @ApiImplicitParam(name = "password", value = "用户密码",dataType = "String")
+            @ApiImplicitParam(name = "password", value = "用户密码",dataType = "String"),
+            @ApiImplicitParam(name = "code", value = "验证码",dataType = "String")
     })
     @PostMapping("/api/register")
     @ResponseBody
-    public QuarkResult checkUserName(String email, String username, String password) {
+    public QuarkResult checkUserName(String email, String username, String password,String code,HttpSession session) {
         QuarkResult result = restProcessor(() -> {
             if (!userService.checkUserName(username))
                 return QuarkResult.warn("用户名已存在，请重新输入");
-
             if (!userService.checkUserEmail(email))
                 return QuarkResult.warn("用户邮箱已存在，请重新输入");
-
+            Object sessionCodeObj = session.getAttribute(SESSION_REGISTER_CODE);
+            String sessionCode = sessionCodeObj == null ? "" : sessionCodeObj.toString();
+            if (!sessionCode.equalsIgnoreCase(code))
+                return QuarkResult.warn("邮箱验证码不正确，请重新输入");
             else
+                session.removeAttribute(SESSION_REGISTER_CODE);
                 userService.createUser(email,username,password);
 
             return QuarkResult.ok();
@@ -165,6 +169,7 @@ public class UserController extends BaseController {
     public QuarkResult getUserByToken() {
         QuarkResult result = restProcessor(() -> {
             User user = SubjectHolder.get();
+            user = userService.getByPK(user.getId());
             if (user == null) return QuarkResult.warn("session过期,请重新登录");
             return QuarkResult.ok(user);
         });
@@ -261,7 +266,7 @@ public class UserController extends BaseController {
     @ApiOperation("发送邮箱验证码")
     @ApiImplicitParams({
     })
-    @GetMapping("/api/register/sendemailcode")
+    @PostMapping("/api/register/sendemailcode")
     @ResponseBody
     public QuarkResult sendEmailCode(String email, String nickname, HttpSession session){
         QuarkResult result = restProcessor(() -> {
