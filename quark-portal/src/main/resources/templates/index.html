@@ -122,8 +122,8 @@
 
             laypage.render({
                 elem: 'pager'
-                ,limit:data.total
-                , count: data.pageSize //总页数
+                ,limit:data.pageSize
+                , count: data.total//总页数
                 , jump: function (obj, first) {
                     //得到了当前页，用于向服务端请求对应数据
                     if (!first) {

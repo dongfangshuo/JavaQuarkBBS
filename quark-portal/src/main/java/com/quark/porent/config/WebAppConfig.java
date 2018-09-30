@@ -24,7 +24,6 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginInterceptor).addPathPatterns(
-
                 "/user/set",
                 "/user/seticon",
                 "/user/setpsw",

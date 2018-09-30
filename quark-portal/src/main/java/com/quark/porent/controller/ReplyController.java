@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * @Author LHR
  * Create By 2017/8/30
@@ -46,7 +49,9 @@ public class ReplyController extends BaseController{
             if (user.getEnable() != 1) return QuarkResult.warn("用户处于封禁状态！");
 
             replyService.saveReply(reply, postsId, user);
-            return QuarkResult.ok();
+            Map<String,String> map = new HashMap<>();
+            map.put("action","/posts/detail?id="+postsId);
+            return QuarkResult.ok(map);
         });
         return result;
     }

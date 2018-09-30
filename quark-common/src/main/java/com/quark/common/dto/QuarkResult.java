@@ -36,7 +36,7 @@ public class QuarkResult implements Serializable {
     /**
      * 本页返回数量
      */
-    private Integer total;
+    private long total;
 
     public Integer getStatus() {
         return status;
@@ -70,7 +70,7 @@ public class QuarkResult implements Serializable {
         this.pageSize = pageSize;
     }
 
-    public Integer getTotal() {
+    public long getTotal() {
         return total;
     }
 
@@ -103,7 +103,7 @@ public class QuarkResult implements Serializable {
      * @param pageSize
      * @param total
      */
-    public QuarkResult(Integer status, Object data, long pageSize, Integer total) {
+    public QuarkResult(Integer status, Object data, long pageSize, long total) {
         this.status = status;
         this.data = data;
         this.pageSize = pageSize;
@@ -134,7 +134,7 @@ public class QuarkResult implements Serializable {
         return new QuarkResult(StateEnum.ERROR.getState(),error);
     }
 
-    public static QuarkResult ok(Object data,long pageSize,Integer total){
+    public static QuarkResult ok(Object data,long pageSize,long total){
         return new QuarkResult(StateEnum.SUCCESS.getState(),data,pageSize,total);
     }
 }

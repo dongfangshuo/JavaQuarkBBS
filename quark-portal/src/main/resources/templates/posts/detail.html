@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="detail-body photos" style="margin-bottom: 20px;">
-                        {{ d.data.posts.content}}
+                        {{ d.fly.content(d.data.posts.content)}}
                     </div>
                 </div>
 
@@ -115,7 +115,7 @@
 <!--<script th:src="@{/js/jquery-1.11.2.min.js}"></script>-->
 <!--<script th:src="@{/js/jquery.cookie.js}"></script>-->
 <!--<script th:src="@{/js/quark_api.js}"></script>-->
-<script>layui.cache.page ='jie';layui.cache.user ={username:'游客' ,uid:-1 ,avatar:'//res.layui.com/static/images/fly/avatar/default.png' ,experience:0 ,sum:0 ,vip:0 ,sex:''};layui.config({version:"1536754808018"}).extend({'fly':'//127.0.0.1:8082/mods/index'}).use('fly');</script>
+<script>layui.cache.page ='jie';layui.cache.user ={username:'游客' ,uid:-1 ,avatar:'//res.layui.com/static/images/fly/avatar/default.png' ,experience:0 ,sum:0 ,vip:0 ,sex:''};layui.config({version:"1536754808018"}).extend({'fly':'//127.0.0.1:8082/js/index'}).use('fly');</script>
 <script>
     var id = $.getUrlParam('id');
     layui.use(['laypage', 'laytpl','fly'], function () {
@@ -129,17 +129,17 @@
 
     });
 
-    layui.use(['form', 'layedit'], function () {
-        var form = layui.form,
-            layedit = layui.layedit,
-            layer = layui.layer;
-
-        layedit.set({
-            uploadImage: {
-                url: quark_upload_api,
-                type: 'post' //默认post
-            }
-        });
+//    layui.use(['form', 'layedit'], function () {
+//        var form = layui.form,
+//            layedit = layui.layedit,
+//            layer = layui.layer;
+//
+//        layedit.set({
+//            uploadImage: {
+//                url: quark_upload_api,
+//                type: 'post' //默认post
+//            }
+//        });
 
 //        var content = layedit.build('L_content'); //建立编辑器
 //        form.on('submit(*)', function () {
@@ -171,7 +171,7 @@
 //
 //
 //        });
-    });
+//    });
     <!--根据id 翻页获取信息-->
     function loadRepaly(laytpl, laypage,fly, pageNo, renderpager) {
 
@@ -188,12 +188,12 @@
             if (!renderpager) return;
             laypage.render({
                 elem: 'pager'
-                , limit: data.total
-                , count: data.pageSize //总页数
+                , limit: data.pageSize
+                , count: data.total//总页数
                 , jump: function (obj, first) {
                     //得到了当前页，用于向服务端请求对应数据
                     if (!first) {
-                        loadRepaly(laytpl, laypage, obj.curr, false);
+                        loadRepaly(laytpl, laypage,fly, obj.curr, false);
                         $('body').prop('scrollTop', '0');
                     }
                 }

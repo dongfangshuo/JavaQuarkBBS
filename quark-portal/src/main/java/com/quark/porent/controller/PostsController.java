@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @Author LHR
@@ -70,9 +71,10 @@ public class PostsController extends BaseController {
         QuarkResult result = restProcessor(() -> {
             User user = SubjectHolder.get();
             if (user.getEnable() != 1) return QuarkResult.warn("用户处于封禁状态！");
-
             postsService.savePosts(posts, labelId, user);
-            return QuarkResult.ok();
+            Map<String,String> map = new HashMap<>();
+            map.put("action","/posts/detail?id="+posts.getId());
+            return QuarkResult.ok(map);
         });
 
         return result;
@@ -96,7 +98,7 @@ public class PostsController extends BaseController {
             if (!type.equals("good") && !type.equals("top") && !type.equals(""))
                 return QuarkResult.error("类型错误!");
             Page<Posts> page = postsService.getPostsByPage(type, search, pageNo - 1, length);
-            return QuarkResult.ok(page.getContent(), page.getTotalElements(), page.getNumberOfElements());
+            return QuarkResult.ok(page.getContent(), Integer.valueOf(length).longValue(),page.getTotalElements());
 
         });
 
@@ -126,7 +128,7 @@ public class PostsController extends BaseController {
             Page<Reply> page = replyService.getReplyByPage(postsid, pageNo - 1, length);
             map.put("replys", page.getContent());
 
-            return QuarkResult.ok(map, page.getTotalElements(), page.getNumberOfElements());
+            return QuarkResult.ok(map, Integer.valueOf(length).longValue(),page.getTotalElements());
         });
         return result;
 
@@ -149,7 +151,7 @@ public class PostsController extends BaseController {
             Label label = labelService.findOne(labelid);
             if (label == null) return QuarkResult.error("标签不存在");
             Page<Posts> page = postsService.getPostsByLabel(label, pageNo - 1, length);
-            return QuarkResult.ok(page.getContent(), page.getTotalElements(), page.getNumberOfElements());
+            return QuarkResult.ok(page.getContent(), Integer.valueOf(length).longValue(),page.getTotalElements());
 
         });
 
