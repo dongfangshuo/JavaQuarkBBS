@@ -2,7 +2,7 @@
 <div th:fragment="header" xmlns:th="http://www.thymeleaf.org">
 <div class="header">
     <div class="main">
-        <a class="logo" th:href="@{/index}" title="Fly">在路上</a>
+        <a class="logo" th:href="@{/index}" title="Fly">气泡游记</a>
         <div class="nav">
             <a class="nav-this" th:href="@{/index}">
                 <i class="iconfont icon-wenda"></i>交流
@@ -17,6 +17,7 @@
     </div>
 </div>
 <script th:inline="text">
+    var apiurl = "[[${apiUrl}]]";
     var quark_login_api = "[[${apiUrl}]]/user/api/login";
     var quark_getUser_api = "[[${apiUrl}]]/user/api/message/";
     var quark_logout_api = "[[${apiUrl}]]/user/api/logout";
@@ -61,7 +62,8 @@
                 "</a>"+
                 "<div class='nav'>"+
                 "<a href='/user/set'><i class='iconfont icon-shezhi'></i>设置</a>"+
-                "<a href='' onclick='logout()'><i class='iconfont icon-tuichu' style='top: 0; font-size: 22px;'></i>退了</a>"+
+                "<a href='"+quark_logout_api+"'><i class='iconfont icon-tuichu' style='top: 0; font-size: 22px;'></i>退了</a>"+
+                "</form>"+
                 "</div>";
         }else{
             htm ="<a class='unlogin' href='#'><i class='iconfont icon-touxiang'></i></a>"+
@@ -70,21 +72,6 @@
 
         $(".nav-user").append(htm);
     });
-
-        //登出操作
-        function logout() {
-
-            $.post(quark_logout_api,{
-                token: getCookie()
-            },function (obj) {
-               if (obj.status == 200){
-                   deleteCookie();
-                   location.href = "/index";
-               }else{
-                   layer.msg(obj.error,{icon:5});
-               }
-            });
-        }
 
 
 </script>

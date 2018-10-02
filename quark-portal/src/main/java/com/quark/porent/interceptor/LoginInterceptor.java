@@ -42,6 +42,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return false;
         }
         User user = userService.getUserByToken(token);
+        user = userService.findOne(user.getId());
         SubjectHolder.put(user);
         // 取不到用户信息
         if (user == null) {

@@ -236,14 +236,10 @@ public class UserController extends BaseController {
     @ApiOperation("登出用户")
     @ApiImplicitParams({
     })
-    @PostMapping("/api/logout")
-    @ResponseBody
-    public QuarkResult logout(HttpServletResponse httpServletResponse) {
-        QuarkResult result = restProcessor(() -> {
-            deleteCookie(httpServletResponse);
-            return QuarkResult.ok();
-        });
-        return result;
+    @GetMapping("/api/logout")
+    public String logout(HttpServletResponse httpServletResponse) {
+        deleteCookie(httpServletResponse);
+        return "redirect:/index";
     }
 
     @ApiOperation("根据用户ID获取用户详情与用户最近发布的十个帖子[主要用于用户主页展示]")
@@ -274,8 +270,8 @@ public class UserController extends BaseController {
             if(!emailValidator.isValid(email,null)) return QuarkResult.warn("请先填写正确格式的邮箱");
             String code = RandomStringUtils.randomNumeric(6);
             session.setAttribute(SESSION_REGISTER_CODE,code);
-            String subject = "在路上-注册验证码";
-            String content = String.format("hi,%s:<br/>您的注册验证码是:%s。<br/>from 在路上",nickname,code);
+            String subject = "气泡游记-注册验证码";
+            String content = String.format("hi,%s:<br/>您的注册验证码是:%s。<br/>from 气泡游记",nickname,code);
             boolean isSuccess = sendEmail(email,subject,content);
             if(!isSuccess) return QuarkResult.warn("邮件发送失败，请核实邮箱是否可用");
             return QuarkResult.ok();

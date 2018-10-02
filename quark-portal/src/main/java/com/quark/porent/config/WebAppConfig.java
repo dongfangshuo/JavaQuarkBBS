@@ -34,6 +34,7 @@ public class WebAppConfig extends WebMvcConfigurerAdapter {
                 "/user/api/detail",
                 "/notification/api",
                 "/posts/add",
+                "/posts/edit",
                 "/posts/api/post",
                 "/reply/api",
                 "/upload/api/image",

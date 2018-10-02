@@ -47,9 +47,20 @@ public class PostsController extends BaseController {
 
     @RequestMapping("/add")
     public ModelAndView add(){
-        ModelAndView modelAndView =  new ModelAndView("posts/add");
+        ModelAndView modelAndView =  new ModelAndView("posts/edit");
         List<Label> labels = labelService.findAll();
         modelAndView.addObject("labels",labels);
+        return modelAndView;
+    }
+
+    @RequestMapping("/edit")
+    public ModelAndView edit(Integer id){
+        ModelAndView modelAndView =  new ModelAndView("posts/edit");
+        List<Label> labels = labelService.findAll();
+        modelAndView.addObject("labels",labels);
+        if(id == null) return modelAndView;
+        Posts posts = postsService.findOne(id);
+        modelAndView.addObject("posts",posts);
         return modelAndView;
     }
 
@@ -63,7 +74,8 @@ public class PostsController extends BaseController {
     @ApiImplicitParams({
             @ApiImplicitParam(name = "content", value = "帖子内容", dataType = "String"),
             @ApiImplicitParam(name = "title", value = "帖子标题", dataType = "String"),
-            @ApiImplicitParam(name = "labelId", value = "标签ID", dataType = "Integer")
+            @ApiImplicitParam(name = "labelId", value = "标签ID", dataType = "Integer"),
+            @ApiImplicitParam(name = "id", value = "帖子id", dataType = "Integer")
     })
     @PostMapping("/api/post")
     @ResponseBody
@@ -71,7 +83,7 @@ public class PostsController extends BaseController {
         QuarkResult result = restProcessor(() -> {
             User user = SubjectHolder.get();
             if (user.getEnable() != 1) return QuarkResult.warn("用户处于封禁状态！");
-            postsService.savePosts(posts, labelId, user);
+            postsService.saveOrUpdatePosts(posts, labelId, user);
             Map<String,String> map = new HashMap<>();
             map.put("action","/posts/detail?id="+posts.getId());
             return QuarkResult.ok(map);

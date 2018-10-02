@@ -79,7 +79,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User>  implements 
     public String LoginUser(User user) {
         String token = UUID.randomUUID().toString();
         redisService.cacheString(REDIS_USER_KEY + token, user, REDIS_USER_TIME);
-        redisSocketService.cacheSet(REDIS_USERID_KEY,user.getId());
+//        redisSocketService.cacheSet(REDIS_USERID_KEY,user.getId());
 //        loginId.add(user.getId());//维护一个登录用户的set
         return token;
     }

@@ -74,6 +74,7 @@ public class UploadController {
                 String s = FileUtils.uploadFile(key,file,aliOssClient);
                 s = imgHost +"/"+ s+OSS_IMAGE_STYLE_ICON;
                 userService.updateUserIcon(user.getId(),s);
+                user.setIcon(s);
                 return QuarkResult.ok(new UploadResult.Data(s));
 
             } catch (IOException e) {

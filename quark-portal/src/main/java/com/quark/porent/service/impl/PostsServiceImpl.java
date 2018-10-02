@@ -38,7 +38,7 @@ public class PostsServiceImpl extends BaseServiceImpl<PostsDao, Posts> implement
 
     @Transactional
     @Override
-    public void savePosts(Posts posts, Integer labelId, User user) {
+    public void saveOrUpdatePosts(Posts posts, Integer labelId, User user) {
         try {
             Label label = labelDao.findOne(labelId);
 
@@ -48,11 +48,19 @@ public class PostsServiceImpl extends BaseServiceImpl<PostsDao, Posts> implement
             label.setPostsCount(++postsCount);
             labelDao.save(label);
 
+            if(posts.getId() == null){
+                posts.setInitTime(new Date());
+                posts.setLabel(label);
+                posts.setUser(user);
+                repository.save(posts);
+            }else{
+                Posts savedPosts = repository.getOne(posts.getId());
+                savedPosts.setLabel(label);
+                savedPosts.setUser(user);
+                savedPosts.setContent(posts.getContent());
+                repository.save(savedPosts);
+            }
             //添加帖子
-            posts.setLabel(label);
-            posts.setInitTime(new Date());
-            posts.setUser(user);
-            repository.save(posts);
         } catch (ServiceProcessException e) {
             throw e;
         } catch (Exception e) {
