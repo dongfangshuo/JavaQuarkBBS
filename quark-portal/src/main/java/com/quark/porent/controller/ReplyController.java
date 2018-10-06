@@ -28,11 +28,6 @@ import java.util.Map;
 @RequestMapping("/reply")
 public class ReplyController extends BaseController{
 
-    @Autowired
-    private WebSocketController webSocketController;
-
-    @Autowired
-    private UserService userService;
 
     @Autowired
     private ReplyService replyService;

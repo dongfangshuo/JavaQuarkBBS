@@ -10,7 +10,6 @@ import com.quark.common.entity.User;
 import com.quark.common.exception.ServiceProcessException;
 import com.quark.porent.service.NotificationService;
 import com.quark.porent.service.ReplyService;
-import com.quark.porent.service.WebSocketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,9 +32,6 @@ public class ReplyServiceImpl extends BaseServiceImpl<ReplyDao, Reply> implement
 
     @Autowired
     private NotificationService notificationService;
-
-    @Autowired
-    private WebSocketService webSocketService;
 
     @Override
     public Page<Reply> getReplyByPage(Integer postsId, int pageNo, int length) {
@@ -85,8 +81,8 @@ public class ReplyServiceImpl extends BaseServiceImpl<ReplyDao, Reply> implement
                 notification.setTouser(posts.getUser());
                 notification.setInitTime(new Date());
                 notificationService.save(notification);
-                // 使用WebSocket进行1对1通知
-                webSocketService.sendToOne(posts.getUser().getId());
+//                // 使用WebSocket进行1对1通知
+//                webSocketService.sendToOne(posts.getUser().getId());
             }
         } catch (ServiceProcessException e) {
             throw e;

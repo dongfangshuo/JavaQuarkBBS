@@ -15,8 +15,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Service
 public class WebEnvironmentInterceptor implements WebRequestInterceptor {
-    @Value("${socket_url}")
-    private String socketUrl;
     @Override
     public void preHandle(WebRequest request) throws Exception {
 
@@ -29,7 +27,6 @@ public class WebEnvironmentInterceptor implements WebRequestInterceptor {
         StringBuffer sb = httpServletRequest.getRequestURL();
         if(model != null){
             model.put("apiUrl",sb.substring(0,sb.indexOf(httpServletRequest.getRequestURI())));
-            model.put("socket_url",socketUrl);
         }
     }
 

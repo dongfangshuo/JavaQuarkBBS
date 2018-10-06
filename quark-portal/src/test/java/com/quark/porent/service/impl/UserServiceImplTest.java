@@ -11,7 +11,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
-@TestPropertySource(locations = {"classpath:application.properties"})
+@TestPropertySource(locations = {"classpath:application-dev.properties"})
 @SpringBootTest
 public class UserServiceImplTest {
 

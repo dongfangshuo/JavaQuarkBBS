@@ -12,7 +12,6 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  * Create By 2017/8/22
  */
 @Configuration
-@PropertySource("classpath:resource.properties")
 public class PropertiesConfig {
     @Value("${oss.string.bucket}")
     private String stringBucket;

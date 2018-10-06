@@ -1,7 +1,8 @@
-package com.quark.porent;
+package com.quark.porent.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -14,6 +15,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @Author LHR
  * Create By 2017/8/20
  */
+@Profile("dev")
 @Configuration
 @EnableSwagger2
 public class Swagger2Configuration {
